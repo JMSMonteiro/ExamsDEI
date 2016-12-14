@@ -5,13 +5,14 @@
  */
 package GestorDeExames;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author jmmonteiro
  */
-public class Curso {
+public class Curso implements Serializable{
 
     private String nome;
     private String grau;

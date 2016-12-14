@@ -120,7 +120,7 @@ public class Exame {
     }
 
     //Lista alunos e respectivas notas
-    void listaAlunos() {
+    public void listaAlunos() {
         System.out.println("Alunos inscritos:\n\n");
         for (Notas aux : notas) {
             Aluno al = aux.getAluno();
@@ -133,7 +133,7 @@ public class Exame {
     }
 
     //lista funcionários docentes, e não docentes
-    void listaFuncionarios() {
+    public void listaFuncionarios() {
         System.out.println("Funcionários associados ao exame:\n\n");
         System.out.println("Docentes:\n");
         for (Docente aux : vigilantes) {
@@ -144,24 +144,35 @@ public class Exame {
             System.out.println("-" + aux.getNome());
         }
     }
-
+    //lançar as notas
+    public void lancaNotas() {
+        System.out.println("Por favor Insira as notas aluno a aluno.");
+        Scanner sc = new Scanner(System.in);
+        for(Notas n : this.notas) {
+            System.out.print(n.getAluno().getNome() + "Nota atribuida: ");
+            int nota = sc.nextInt();
+            System.out.println("");
+            n.setNota(nota);
+        }
+    }
+    
     //lista todas as notas obtidas no exame
-    void listaNotas() {
+    public void listaNotas() {
         System.out.println("Notas do exame:\n\n");
         for (Notas aux : notas) {
             System.out.println("-" + aux.getNota());
         }
     }
     
-     @Override
-     public String toString(){
-     return "Época: " + epoca() +
-     "\nDisciplina: " + disciplina +
-     "\nData de realização: " + data.getCal().toString()+
-     "\nDuracao: " + duracao +
-     "\nSala: " + sala.getNome()+
-     "\nNumero de Vigilantes: " + vigilantes.size() +
-     "\nNumero de Alunos: " + inscritos.size();
-     }
+    @Override
+    public String toString(){
+    return "Época: " + epoca()
+            + "\nDisciplina: " + disciplina
+            + "\nData de realização: " + data.getCal().toString()
+            + "\nDuracao: " + duracao
+            + "\nSala: " + sala.getNome()
+            + "\nNumero de Vigilantes: " + vigilantes.size()
+            + "\nNumero de Alunos: " + inscritos.size();
+    }
      
 }

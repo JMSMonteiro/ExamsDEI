@@ -58,10 +58,7 @@ public class GestorFicheiros {
             list = (ArrayList)readObject();
             closeORead();
         }
-        catch(IOException e){
-            System.out.println(e.getMessage());
-        }
-        catch(ClassNotFoundException e){
+        catch(IOException | ClassNotFoundException e){
             System.out.println(e.getMessage());
         }
         return list;

@@ -11,27 +11,48 @@ package GestorDeExames;
  */
 public class Notas {
     private Aluno aluno;
-    private int nota;
+    private float nota;
 
-    public Notas(Aluno aluno, int nota) {
+    /**
+     * Builder da classe Notas
+     * @param aluno Objeto da classe Aluno
+     * @param nota nota que o aluno teve. Valor entre 0 e 20. Poderá ter casas decimais
+     */
+    public Notas(Aluno aluno, float nota) {
         this.aluno = aluno;
         this.nota = nota;
     }
     
     //get & set
+    /**
+     * define o aluno 
+     * @param aluno define o objeto da classe Aluno.
+     */
     public void setAluno(Aluno aluno) {
         this.aluno = aluno;
     }
-
-    public void setNota(int nota) {
+    
+    /**
+     * define o valor da nota que o aluno teve.
+     * @param nota Valor da nota do aluno, vai de 0 a 20. Poderá ter casas decimais
+     */
+    public void setNota(float nota) {
         this.nota = nota;
     }
-
+    
+    /**
+     * Devolve o Objeto da classe Aluno
+     * @return devolve o Objeto aluno
+     */
     public Aluno getAluno() {
         return aluno;
     }
-
-    public int getNota() {
+    
+    /**
+     * Devolve o valor float da nota
+     * @return devolve o valor da nota (float)
+     */
+    public float getNota() {
         return nota;
     }
     

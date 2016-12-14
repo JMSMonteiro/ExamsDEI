@@ -5,11 +5,13 @@
  */
 package GestorDeExames;
 
+import java.io.Serializable;
+
 /**
  *
  * @author jmmonteiro
  */
-public class Aluno extends Pessoa {
+public class Aluno extends Pessoa implements Serializable{
 
     private int numero;
     private int matrícula;

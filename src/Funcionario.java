@@ -5,11 +5,13 @@
  */
 package GestorDeExames;
 
+import java.io.Serializable;
+
 /**
  *
  * @author jmmonteiro
  */
-public class Funcionario extends Pessoa{
+public class Funcionario extends Pessoa implements Serializable{
     private int numeroMecanografico;
     private String categoria;
 

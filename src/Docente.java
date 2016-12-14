@@ -5,13 +5,14 @@
  */
 package GestorDeExames;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  *
  * @author jmmonteiro
  */
-public class Docente extends Funcionario{
+public class Docente extends Funcionario implements Serializable{
     private String areaInvestigacao;
     private ArrayList<Data> trabalho;
 

@@ -24,7 +24,7 @@ public class GestorDeExamesDoDEI {
     private static ArrayList<Exame> exames; //is this really needed?
     //file names
     private String cursosFich = "cursos.obj";
-    private String pessoasFich = "pessoas.obj";
+    private static String pessoasFich = "pessoas.obj";
     private String salasFich = "salas";         //.txt
     private String examesFich = "exames.obj";
 
@@ -43,7 +43,10 @@ public class GestorDeExamesDoDEI {
         ArrayList<NaoDocente> naoDocentes = new ArrayList<>();
         exames = new ArrayList<>();
         salas = new ArrayList<>();
+        
+        gestor.guardaPessoas(pessoasFich);
 
+        /*
         Scanner sc = new Scanner(System.in);
 
         for (Pessoa p : pessoas) {
@@ -95,8 +98,13 @@ public class GestorDeExamesDoDEI {
                 break;
             case 3:
                 
-
-        }
+            case 9:
+                gestor.ExamesDoAluno(exames, alunos);
+            
+            case 10:
+                gestor.ExamesDoFuncionario(exames, docentes, naoDocentes);  
+                
+        }*/
     }
 
     public Exame novoExame() {
@@ -314,6 +322,126 @@ public class GestorDeExamesDoDEI {
     void imprimeExames() {
 
     }
+    
+    /**
+     * Função que imprime os exames em que um determinado aluno (escolhido pelo seu número), pelo utilizador, no decorrer da função,
+     * está inscrito
+     * @param exames ArrayList de Exames, todos os exames existentes
+     * @param alunos ArrayList de alunos, todos os alunos registados na base de dados
+     */
+    public void ExamesDoAluno(ArrayList<Exame> exames, ArrayList<Aluno> alunos){
+        //ArrayList<Exame> aux = new ArrayList<>();
+        //Pede numero de estudante
+        Scanner sc = new Scanner(System.in);
+        int nEstudante;
+        System.out.println("Insira o número do aluno que pretende consultar:");
+        do{
+            int flag = 0;
+            System.out.print("-> ");
+            nEstudante = sc.nextInt();
+            //ver se nEstudante existe no array de alunos
+            for(Aluno a : alunos){
+                if(nEstudante == a.getNumero()){
+                    flag = 1;
+                    break;
+                }
+            }
+            if(flag == 1){
+                break;
+            }
+            System.out.println("Não foi encontrado nenhum estudante com o número " + String.valueOf(nEstudante) + ", por favor insira o número novamente." );
+        }while(true);
+        
+        //print "Exames em que o aluno <nome> está inscrito"
+        for(Exame e : exames){
+            ArrayList<Notas> lista = e.getNotas();
+            int flag = 0;
+            for(Notas a : lista){
+                if(a.getAluno().getNumero() == nEstudante){
+                    flag = 1;
+                    break;
+                }
+                //se o aluno foi encontrado
+                if(flag == 1){
+                    //aux.add(e);
+                    System.out.print(e.getData().toString() + " " + e.getDisciplina());
+                    if(a.getNota() != -1){
+                        System.out.println("Nota: " + String.valueOf(a.getNota()));
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * Função que imprime todos os exames em que determinado funcionário docente ou não docente, escolhido pelo utilizador durante a execução
+     * desta função, está inscrito.
+     * @param exames ArrayList de Exames, todos os exames existentes.
+     * @param docentes ArrayList de Docente, todos os docentes registados na base de dados.
+     * @param naoDocentes ArrayList de NaoDocente, todos os funcionários não docentes registados na base de dados.
+     */
+    public void ExamesDoFuncionario(ArrayList<Exame> exames, ArrayList<Docente> docentes, ArrayList<NaoDocente> naoDocentes){
+        //ArrayList<Exame> aux = new ArrayList<>();
+        //Pede numero mecanográfico
+        Scanner sc = new Scanner(System.in);
+        //Scanner
+        int nMecan;
+        int auxi = 0;   //meramente para otimização
+        System.out.println("Insira o número do funcionário que pretende consultar:");
+        //----------------------inserir opção para retroceder?------------------------
+        do{
+            int flag = 0;
+            System.out.print("-> ");
+            nMecan = sc.nextInt();
+            //procurar numero no array de funcionarios
+            for(Docente d : docentes){
+                if(nMecan == d.getNumeroMecanografico()){
+                    flag = 1;
+                    auxi = 1;
+                    break;
+                }
+            }
+            if(flag == 0){
+                for(NaoDocente n : naoDocentes){
+                    if(nMecan == n.getNumeroMecanografico()){
+                        flag = 1;
+                        auxi = 2;
+                        break;
+                    }
+                }
+            }
+            if(flag == 1){
+                break;
+            }
+            System.out.println("Não foi encontrado nenhum funcionario com o número " + String.valueOf(nMecan) + ", por favor insira o número novamente.");
+        }while(true);
+        
+        for(Exame e : exames){
+            ArrayList<Docente> lista = e.getVigilantes();
+            ArrayList<NaoDocente> lista2 = e.getApoio();
+            int flag = 0;
+            
+            if(auxi == 1){
+                for(Docente f : lista){
+                    if(f.getNumeroMecanografico() == nMecan){
+                        flag = 1;
+                        break;
+                    }
+                }
+            }
+            else if(auxi == 2){
+                for(NaoDocente n : lista2){
+                    if(n.getNumeroMecanografico() == nMecan){
+                        flag = 1;
+                        break;
+                    }
+                }
+            }
+            if(flag == 1){
+                //aux.add(e);
+                System.out.println(e.getData().toString() + "Disciplina: " + e.getDisciplina());
+            }
+        }
+    }
 
     void boot() {
         //load dos ficheiros todos
@@ -323,6 +451,17 @@ public class GestorDeExamesDoDEI {
         //fecha fich2 & abre fich3
         //fecha fich3 & abre fich4
         //fecha fich4
+    }
+    
+    public void guardaPessoas(String pessoasFich/*, ArrayList<Pessoa> list*/){
+        ArrayList<Pessoa> list = new ArrayList<>();
+        ArrayList<Disciplina> disc = new ArrayList<>();
+        ArrayList<Data> dt = new ArrayList<>();
+        list.add(new Aluno(2015235572, 2, new Curso("LEI", "Licenciatura", 3, disc), "normal", "José Monteiro", "ze_miguel97@hotmail.com"));
+        list.add(new Docente("I.A.", 1234567890, "catedrático", "Nuno", "Nuno@dei.uc.pt", dt));
+        list.add(new NaoDocente("apoio técnico", 234567890, "técnico superior", "Marco", "Marco@helper.dei.uc.pt"));
+        GestorFicheiros fich = new GestorFicheiros();
+        fich.writeObjectFileArray(salasFich, list);
     }
 
     void shutdown() {
