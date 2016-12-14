@@ -461,7 +461,12 @@ public class GestorDeExamesDoDEI {
         list.add(new Docente("I.A.", 1234567890, "catedrático", "Nuno", "Nuno@dei.uc.pt", dt));
         list.add(new NaoDocente("apoio técnico", 234567890, "técnico superior", "Marco", "Marco@helper.dei.uc.pt"));
         GestorFicheiros fich = new GestorFicheiros();
-        fich.writeObjectFileArray(salasFich, list);
+        fich.writeObjectFileArray(pessoasFich, list);
+    }
+    
+    public ArrayList lePessoas(String pessoasFich){
+        GestorFicheiros fich = new GestorFicheiros();
+        return fich.readObjectFileArray(pessoasFich);
     }
 
     void shutdown() {
