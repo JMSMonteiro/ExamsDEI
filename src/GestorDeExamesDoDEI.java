@@ -23,58 +23,72 @@ public class GestorDeExamesDoDEI {
     private static ArrayList<Sala> salas;
     private static ArrayList<Exame> exames; //is this really needed?
     //file names
-    private String cursosFich = "cursos.obj";
+    private static String cursosFich = "cursos.obj";
     private static String pessoasFich = "pessoas.obj";
-    private String salasFich = "salas";         //.txt
-    private String examesFich = "exames.obj";
+    private static String salasFich = "salas";         //.txt
+    private static String examesFich = "exames.obj";
 
     public static void main(String[] args) {
-        // TODO code application logic here
+
         GestorDeExamesDoDEI gestor = new GestorDeExamesDoDEI();
-        /*ver se se pode fazer assim ^ ou se é preciso a classe menu
-         */
         int opcao, numero;
+        String nomeDisc;
+        boolean encontrou = false;
         Exame exame;
         Aluno aluno;
         Docente docente;
         NaoDocente naoDocente;
+
         ArrayList<Aluno> alunos = new ArrayList<>();
         ArrayList<Docente> docentes = new ArrayList<>();
         ArrayList<NaoDocente> naoDocentes = new ArrayList<>();
+
         exames = new ArrayList<>();
         salas = new ArrayList<>();
-        
-        gestor.guardaPessoas(pessoasFich);
 
-        /*
         Scanner sc = new Scanner(System.in);
 
+        pessoas = gestor.leArrays(pessoasFich);
+
         for (Pessoa p : pessoas) {
-            if (p.tipoPessoa() == 1) {
-                aluno = (Aluno) p;
-                alunos.add(aluno);
-            } else if (p.tipoPessoa() == 2) {
-                docente = (Docente) p;
-                docentes.add(docente);
-            } else if (p.tipoPessoa() == 3) {
-                naoDocente = (NaoDocente) p;
-                naoDocentes.add(naoDocente);
+            switch (p.tipoPessoa()) {
+                case 1:
+                    aluno = (Aluno) p;
+                    alunos.add(aluno);
+                    break;
+                case 2:
+                    docente = (Docente) p;
+                    docentes.add(docente);
+                    break;
+                case 3:
+                    naoDocente = (NaoDocente) p;
+                    naoDocentes.add(naoDocente);
+                    break;
+                default:
+                    break;
             }
         }
-
-        System.out.print("Escolha uma opção:\n "
+        System.out.println(alunos.get(0).getNome());
+        System.out.println(docentes.get(0).getNome());
+        System.out.println(naoDocentes.get(0).getNome());
+		
+        System.out.print("Escolha uma opção:\n"
                 + "1.Criar Exame.\n"
                 + "2.Inscrever Alunos.\n"
                 + "3.Lançar Notas.\n"
-                + "4.Configurar Sala.\n"
-                + "5.Convocar vigilantes e funcionários para um exame.\n"
-                + "6.Listagem.\n"
-                + "A sua opção: ");
+                + "4.Convocar vigilantes e funcionários para um exame.\n"
+                + "5.Listagem.\n"
+                + "6.Exames do Aluno.\n"
+                + "7.Exames do funcionário.\n"
+                + "\nA sua opção: ");
 
         opcao = sc.nextInt();
         switch (opcao) {
             case 1:
                 exame = gestor.novoExame();
+                if (exame != null) {
+                    System.out.println("Exame marcado para " + exame.getData().getCal().getTime() + " na sala " + exame.getSala().getNome());
+                }
                 exames.add(exame);
                 salas.add(exame.getSala());
                 break;
@@ -84,27 +98,96 @@ public class GestorDeExamesDoDEI {
 
                 if (alunos.isEmpty()) {
                     System.out.println("Não existem alunos listados.");
-                } else {
+                }
+                else {
                     for (Aluno a : alunos) {
                         if (a.getNumero() == numero) {
                             if (gestor.inscreveAluno(a)) {
+                                encontrou = true;
                                 System.out.println("Aluno inscrito.");
-                            } else {
-                                System.out.println("Não foi possivel inscrever o Aluno.");
                             }
                         }
+                    }
+                    if (encontrou == false) {
+                        System.out.println("Não foi possivel inscrever o Aluno.");
                     }
                 }
                 break;
             case 3:
-                
-            case 9:
-                gestor.ExamesDoAluno(exames, alunos);
-            
-            case 10:
-                gestor.ExamesDoFuncionario(exames, docentes, naoDocentes);  
-                
-        }*/
+                System.out.println("Indique a disciplina do Exame:");
+                nomeDisc = sc.nextLine();
+
+                if (exames.isEmpty()) {
+                    System.out.println("Não existem exames listados.");
+                } else {
+                    if (gestor.lançaNotas(nomeDisc)) {
+                        System.out.println("Notas lançadas com sucesso!");
+                    } else {
+                        System.out.println("Não foi possivel lançar Notas");
+                    }
+                }
+                break;
+            case 4:
+                System.out.println("Indique a disciplina do Exame:");
+                nomeDisc = sc.next();
+
+                if (exames.isEmpty()) {
+                    System.out.println("Não existem exames listados.");
+                } else {
+                    if (gestor.convocaVigilantes(naoDocentes, nomeDisc)) {
+                        System.out.println("Convocatória concluida com sucesso. ");
+                    } else {
+                        System.out.println("Não foram convocados Docentes.");
+                    }
+
+                }
+                break;
+            case 5:
+                //do something
+                break;
+            case 6:
+                gestor.examesDoAluno(exames, alunos);
+                break;
+            case 7:
+                gestor.examesDoFuncionario(exames, docentes, naoDocentes);
+                break;
+        }
+        gestor.guardaPessoas(pessoasFich,alunos, docentes, naoDocentes);
+        gestor.guardaArray(cursosFich, cursos);
+        gestor.guardaArray(examesFich, exames);
+    }
+
+    private void escolheDisc(ArrayList<Curso> list, String curso, String disc){
+    	ArrayList<Disciplina> aux;
+    	int flag = 0;
+
+    	System.out.println("Cursos Disponíveis:");
+    	for(Curso c : list){
+    		//lista os cursos
+    		System.out.println(c.getNome());
+    	}
+
+    	System.out.println("\nPor favor insira o nome do Curso que pretende:");
+    	do{
+			//Scanner para String
+			System.out.print("-> ");
+			//curso = sc.nextLine();
+			for(Curso c : list){
+				//procura o curso dado como input no array
+				if(curso.compareToIgnoreCase(c.getNome()) == 0){
+					curso = c.getNome();
+					aux = c.getDisciplinas();
+					flag = 1;
+					break;
+				}
+			}
+			System.out.println("Curso não encontrado, por favor insira o nome novamente.");
+    	}while(true);
+    	System.out.println("Disciplinas disponíveis:");
+    	for(Disciplina d : aux){
+    		//Lista as disciplinas
+    		System.out.println(d.getNome());
+    	}
     }
 
     public Exame novoExame() {
@@ -130,7 +213,7 @@ public class GestorDeExamesDoDEI {
         //Exame
         while (protege) {
             System.out.print("Preencha os dados do EXAME:\n"
-                    + "1. Disciplina: ");
+                    + "Disciplina a que pertence: ");
 
             try {
                 disc = sc.next();
@@ -140,7 +223,7 @@ public class GestorDeExamesDoDEI {
                 System.out.println("--------Insira letras e não números.-------");
             }
 
-            System.out.print("2. Duraçao: ");
+            System.out.print("Duraçao do exame: ");
 
             try {
                 duraçao = sc.nextInt();
@@ -191,7 +274,7 @@ public class GestorDeExamesDoDEI {
     }
 
     public Sala requisitaSala(int duraçao) {
-
+        //se configurar== true é para configurar uma sala existente, se configurar == false é para quando se cria a sala
         String depSala, nomeSala;
         Sala sala = new Sala();
         Data data;
@@ -221,11 +304,14 @@ public class GestorDeExamesDoDEI {
             }
         }
 
-        data = recolheData();
-
-        if (sala.disponibilidade(data, duraçao) == true) {
-            sala.setHorario(data, duraçao);
-        }
+        do {
+            data = recolheData();
+            if (data.disponibilidadeSala(data, duraçao, sala) == true) {
+                sala.setHorario(data, duraçao);
+            } else {
+                System.out.println("A sala não se encontra disponivel nesse horário.");
+            }
+        } while (!data.disponibilidadeSala(data, duraçao, sala));
 
         return sala;
     }
@@ -262,18 +348,22 @@ public class GestorDeExamesDoDEI {
     public boolean inscreveAluno(Aluno aluno) {
         //faz addAluno e return true sempre que insere o aluno no exame e faz break dentro do ciclo para acabar no return false do final, sempre que não o insere
         ArrayList<Disciplina> disc;
+        ArrayList<Exame> examesDisp = new ArrayList<>();
         Disciplina disciplina;
         Exame exame;
-        int i = 0, duracao, matricula;
+        int i = 0, duracao, matricula, num;
         Scanner sc = new Scanner(System.in);
         String insc;
 
         System.out.println("Lista de exames disponiveis:");
         for (Exame exam : exames) {
+            //so disponibiliza os exames das disciplinas do curso do aluno
             disciplina = exam.getDisciplina();
             disc = aluno.getCurso().getDisciplinas();
             if (disc.contains(disciplina)) {
+                examesDisp.add(exam);
                 System.out.println(i + ".\n" + exam.toString()); //imprime o toString() dos exames das disciplinas a que o aluno esta inscrito
+                i++;
             } else {
                 System.out.println("Não há nenhum exame disponivel.");
                 return false;
@@ -283,27 +373,32 @@ public class GestorDeExamesDoDEI {
         while (true) {
             System.out.println("Pretende increver em algum destes exames? (S/N)");
             insc = sc.nextLine();
-            if (insc == "S") {
-                System.out.println("Insira o número do exame: ");
-                i = sc.nextInt();
-                exame = exames.get(i);
-                if (exame.epoca().equals("recurso") || exame.epoca().equals("normal")) {
-                    exame.addAluno(aluno);
-                } else {
-                    duracao = aluno.getCurso().getDuracao();
-                    matricula = aluno.getMatrícula();
-                    if (aluno.getRegime().equals("trabalhador-estudante") || aluno.getRegime().equals("atleta") || aluno.getRegime().equals("dirigente associativo")) {
-                        exame.addAluno(aluno);
-                    } else if (duracao == matricula) {//ultimo ano do curso
-                        exame.addAluno(aluno);
-                    } else {
-                        System.out.println("O estatuto do Aluno não lhe premite inscrever a exames de época ESPECIAL");
-                        break;
-                    }
-                }
-                return true;
 
-            } else if (insc == "N") {
+            if ("S".equals(insc)) {
+                System.out.println("Insira o número do exame: ");
+                num = sc.nextInt();
+                if (num > i || num < 0) {
+                    System.out.println("Opção Inválida");
+                } else {
+                    exame = examesDisp.get(num);
+                    if (exame.epoca().equals("Recurso") || exame.epoca().equals("Normal")) {
+                        exame.adicionaAluno(aluno);
+                    } else {
+                        duracao = aluno.getCurso().getDuracao();
+                        matricula = aluno.getMatrícula();
+                        if (aluno.verificaRegime()) {
+                            exame.adicionaAluno(aluno);
+                        } else if (duracao == matricula) {//ultimo ano do curso
+                            exame.adicionaAluno(aluno);
+                        } else {
+                            System.out.println("O estatuto do Aluno não lhe permite inscrever a exames de época ESPECIAL");
+                            break;
+                        }
+                    }
+                    return true;
+                }
+
+            } else if ("N".equals(insc)) {
                 break;
             } else {
                 System.out.println("Insira S - Sim ou N - Nao.");
@@ -319,6 +414,128 @@ public class GestorDeExamesDoDEI {
         return false;
     }
 
+    private boolean lançaNotas(String nomeDisc) {
+        int i = 0, num;
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Exame> examesDisp = new ArrayList<>();
+        String insc;
+        Exame exame;
+
+        for (Exame exam : exames) {
+            if (exam.getDisciplina().getNome().equals(nomeDisc)) {
+                System.out.println(i + ".\n" + exam.toString()); //imprime o toString() dos exames da disciplina dada
+                examesDisp.add(exam);
+                i++;
+            }
+        }
+        while (true) {
+            System.out.println("Pretende lançar as notas de algum destes exames? (S/N)");
+            insc = sc.nextLine();
+
+            if ("S".equals(insc)) {
+                System.out.println("Insira o número do exame: ");
+                num = sc.nextInt();
+                if (num > i || num < 0) {
+                    System.out.println("Opção Inválida");
+                } else {
+                    exame = examesDisp.get(num);
+                    if (exame.atribuiNotas()) {
+                        return true;
+                    }
+                }
+
+            } else if ("N".equals(insc)) {
+                break;
+            } else {
+                System.out.println("Insira S - Sim ou N - Nao.");
+            }
+        }
+        return false;
+    }
+
+    public boolean convocaVigilantes(ArrayList<NaoDocente> naoDocente, String nomeDisc) {
+        Data dataDocente;
+        Exame exame;
+        boolean convocaDocente = false;
+        int j = 0, num;
+        String insc;
+
+        Scanner sc = new Scanner(System.in);
+        ArrayList<Exame> examesDisp = new ArrayList<>();
+        ArrayList<Exame> examesDocente; //lista de exames vigiados pelo Docente
+
+        for (Exame exam : exames) {
+            if (exam.getDisciplina().getNome().equals(nomeDisc)) {
+                System.out.println(j + ".\n" + exam.toString()); //imprime o toString() dos exames da disciplina dada
+                examesDisp.add(exam);
+                j++;
+            }
+        }
+        while (true) {
+            System.out.println("Pretende convocar funcionarios para algum destes exames? (S/N)");
+            insc = sc.next();
+
+            if ("S".equals(insc)) {
+                System.out.println("Insira o número do exame: ");
+                num = sc.nextInt();
+                if (num > j || num < 0) {
+                    System.out.println("Opção Inválida");
+                } else {
+                    exame = examesDisp.get(num);
+                    if (exame.getVigilantes().size() == 3) {//se a lista tiver 3 elementos nao procura mais
+                        System.out.println("O Exame já tem 3 Docentes na lista de vigilantes, pretende convocar mais? (S/N)");
+                        do {
+                            insc = sc.nextLine();
+                            if (insc.equals("N")) {
+                                return false; //para fazer so 3
+                            } else if (insc.equals("S")) {
+                                break;
+                            } else {
+                                System.out.println("Insira S - Sim ou N - Nao.\nA sua resposta: ");
+                            }
+                        } while (true);
+                    }
+                    break;
+                }
+
+            } else if ("N".equals(insc)) {
+                return false;
+            } else {
+                System.out.println("Insira S - Sim ou N - Nao.");
+            }
+        }
+
+        dataDocente = exame.getData();
+
+        for (Docente docenteD : exame.getDisciplina().getDocentes()) {//pega num docente da lista de docentes da Disciplina
+            examesDocente = new ArrayList<>();
+
+            for (Exame exam : exames) { //pega em cada exame existente                  
+                if (exam.getVigilantes().contains(docenteD)) { //ve se o docente esta a vigiar o exame
+                    examesDocente.add(exam);   //junta os exames que o Docente vigia                     
+                }
+            }
+            //verifica se a data dos exames que o Docente vigia interferem com a Data em que o queremos por a vigiar
+            if (dataDocente.disponibilidadeDocente(examesDocente, exame.getDuracao())) {
+                exame.addVigilante(docenteD);
+                System.out.println("Docente " + docenteD.getNome() + " convocado.");
+                convocaDocente = true;
+
+            }
+        }
+
+        for (int i = 0; i < naoDocente.size(); i++) { //convoca nao Docentes
+            if (exame.getApoio().size() < 5) {
+                exame.addApoio(naoDocente.get(i));
+                System.out.println("Funcionario " + naoDocente.get(i).getNome() + " convocado.");
+            }
+        }
+        System.out.println("Foram convocados " + exame.getVigilantes().size() + " Docentes para vigiar o exame.");
+        System.out.println("Foram convocados " + exame.getApoio().size() + " Docentes para vigiar o exame.");
+
+        return convocaDocente;
+    }
+
     void imprimeExames() {
 
     }
@@ -329,7 +546,7 @@ public class GestorDeExamesDoDEI {
      * @param exames ArrayList de Exames, todos os exames existentes
      * @param alunos ArrayList de alunos, todos os alunos registados na base de dados
      */
-    public void ExamesDoAluno(ArrayList<Exame> exames, ArrayList<Aluno> alunos){
+    public void examesDoAluno(ArrayList<Exame> exames, ArrayList<Aluno> alunos){
         //ArrayList<Exame> aux = new ArrayList<>();
         //Pede numero de estudante
         Scanner sc = new Scanner(System.in);
@@ -379,7 +596,7 @@ public class GestorDeExamesDoDEI {
      * @param docentes ArrayList de Docente, todos os docentes registados na base de dados.
      * @param naoDocentes ArrayList de NaoDocente, todos os funcionários não docentes registados na base de dados.
      */
-    public void ExamesDoFuncionario(ArrayList<Exame> exames, ArrayList<Docente> docentes, ArrayList<NaoDocente> naoDocentes){
+    public void examesDoFuncionario(ArrayList<Exame> exames, ArrayList<Docente> docentes, ArrayList<NaoDocente> naoDocentes){
         //ArrayList<Exame> aux = new ArrayList<>();
         //Pede numero mecanográfico
         Scanner sc = new Scanner(System.in);
@@ -453,24 +670,81 @@ public class GestorDeExamesDoDEI {
         //fecha fich4
     }
     
-    public void guardaPessoas(String pessoasFich/*, ArrayList<Pessoa> list*/){
-        ArrayList<Pessoa> list = new ArrayList<>();
-        ArrayList<Disciplina> disc = new ArrayList<>();
-        ArrayList<Data> dt = new ArrayList<>();
-        list.add(new Aluno(2015235572, 2, new Curso("LEI", "Licenciatura", 3, disc), "normal", "José Monteiro", "ze_miguel97@hotmail.com"));
-        list.add(new Docente("I.A.", 1234567890, "catedrático", "Nuno", "Nuno@dei.uc.pt", dt));
-        list.add(new NaoDocente("apoio técnico", 234567890, "técnico superior", "Marco", "Marco@helper.dei.uc.pt"));
+    private void guardaPessoas(String nomeFich, ArrayList<Aluno> al, ArrayList<Docente> dc, ArrayList<NaoDocente> nd){
+        ArrayList<Pessoa> list;
+
+        list = convergePessoas(al, dc, nd);
+
+        //ArrayList<Disciplina> disc = new ArrayList<>();
+        //ArrayList<Data> dt = new ArrayList<>();
+        //list.add(new Aluno(2015235572, 2, new Curso("LEI", "Licenciatura", 3, disc), "normal", "José Monteiro", "ze_miguel97@hotmail.com"));
+        //list.add(new Docente(		"I.A.", 			1234567890, "catedrático", 		"Nuno", 	"Nuno@dei.uc.pt", 			dt));
+        //list.add(new NaoDocente(	"apoio técnico", 	234567890, 	"técnico superior", "Marco", 	"Marco@helper.dei.uc.pt"));
         GestorFicheiros fich = new GestorFicheiros();
-        fich.writeObjectFileArray(pessoasFich, list);
-    }
-    
-    public ArrayList lePessoas(String pessoasFich){
-        GestorFicheiros fich = new GestorFicheiros();
-        return fich.readObjectFileArray(pessoasFich);
+        fich.writeObjectFileArray(nomeFich, list);
     }
 
+    private ArrayList convergePessoas(ArrayList<Aluno> al, ArrayList<Docente> dc, ArrayList<NaoDocente> nd){
+        ArrayList<Pessoa> out = new ArrayList<>();
+        for(Aluno a : al){
+            out.add(a);
+        }
+        for(Docente d : dc){
+            out.add(d);
+        }
+        for(NaoDocente n : nd){
+            out.add(n);
+        } 
+        return out;
+    }
+    
+    private ArrayList leArrays(String nomeFich){
+        GestorFicheiros fich = new GestorFicheiros();
+        return fich.readObjectFileArray(nomeFich);
+    }
+
+    private void guardaArray(String nomeFich, ArrayList list){
+    	GestorFicheiros fich = new GestorFicheiros();
+        fich.writeObjectFileArray(nomeFich, list);
+    }
+
+	/*
+    private void guardaExames(String nomeFich, ArrayList<Exame> list){
+    	GestorFicheiros fich = new GestorFicheiros();
+        fich.writeObjectFileArray(nomeFich, list);
+    }
+	*/
     void shutdown() {
         //grava ficheiros todos, termina o programa no final
     }
 
+    /*public boolean configuraSala(){
+    Scanner sc = new Scanner(System.in);
+    String nomeSala;
+    int duraçao;
+    boolean encontrou=false;
+    Data data;
+    System.out.print("Nome da Sala que pretende configurar: ");
+    nomeSala = sc.nextLine();
+    System.out.print("Duraçao  ");
+    nomeSala = sc.nextLine();
+    for (Sala s : salas) {
+    if (s.getNome().equals(nomeSala)) {
+    encontrou =true;                    
+    do {
+    data = recolheData();
+    if (s.disponibilidadeSala(data, duraçao) == true) {
+    s.setHorario(data, duraçao);
+    } else {
+    System.out.println("A gsala não se encontra disponivel nesse horário.");
+    }
+    } while (!s.disponibilidadeSala(data, duraçao));
+    }
+    }
+    if(encontrou==false){
+    System.out.println("Não existe nenhuma Sala com esse nome.");
+               
+    }        
+    return false;
+    }*/
 }

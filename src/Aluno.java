@@ -26,6 +26,10 @@ public class Aluno extends Pessoa implements Serializable{
         this.regime = regime;
     }
 
+    public boolean verificaRegime(){
+        return regime.equals("trabalhador-estudante")||regime.equals("atleta")||regime.equals("dirigente associativo");
+    }
+
     public int getNumero() {
         return numero;
     }

@@ -21,13 +21,11 @@ public class Curso implements Serializable{
 
     /**
      * Cria um novo curso.
-     *
      * @param nome Nome do curso.
      * @param grau Grau que este curso irá conferir.
      * @param duracao Duração do curso, em anos.
      * @param disciplinas Conjunto de disciplinas que fazem parte do curso.
      */
-    
     public Curso(String nome, String grau, int duracao, ArrayList<Disciplina> disciplinas) {
         this.nome = nome;
         this.grau = grau;

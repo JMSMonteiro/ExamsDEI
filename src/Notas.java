@@ -5,11 +5,13 @@
  */
 package GestorDeExames;
 
+import java.io.Serializable;
+
 /**
  *
  * @author jmmonteiro
  */
-public class Notas {
+public class Notas implements Serializable{
     private Aluno aluno;
     private float nota;
 

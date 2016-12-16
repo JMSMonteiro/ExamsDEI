@@ -5,13 +5,14 @@
  */
 package GestorDeExames;
 
+import java.io.Serializable;
 import java.util.*;
 
 /**
  *
  * @author jmmonteiro
  */
-public class Exame {
+public class Exame implements Serializable{
 
     private Disciplina disciplina;
     private Data data;
@@ -32,7 +33,7 @@ public class Exame {
         return disciplina;
     }
 
-    public void addAluno(Aluno aluno){
+    public void adicionaAluno(Aluno aluno) {
         this.inscritos.add(aluno);
     }
     
@@ -104,6 +105,43 @@ public class Exame {
         this.notas = notas;
     }
 
+    public boolean atribuiNotas() {
+        Notas nota;
+        float cotaçao;
+        Scanner sc = new Scanner(System.in);
+        if(inscritos.isEmpty()){
+            System.out.println("Não existem Alunos inscritos neste Exame.");
+            return false;
+        }
+        for (Aluno aluno : inscritos) {
+            do {
+                System.out.print("\nNota obtida pelo Aluno " + aluno.getNome() + ": ");
+                cotaçao = sc.nextInt();
+                if(cotaçao>20 ||cotaçao<0){
+                    System.out.println("Só são aceites cotações entre 0 e 20 valores.");
+                }
+                else{
+                    break;
+                }
+            } while(true);
+            nota = new Notas(aluno, cotaçao);
+            notas.add(nota);
+        }
+        if(inscritos.isEmpty()){
+            System.out.println("Ocorreu um erro ao lançar as notas.");
+            return false;
+        }
+        return true;
+    }
+
+    public void addVigilante(Docente docente){
+        this.vigilantes.add(docente);
+    }
+    
+    public void addApoio(NaoDocente naoDocente){
+        this.apoio.add(naoDocente);
+    }
+
     /**
      * Método utilizado para obter a época em que o exame se realiza.
      *
@@ -144,6 +182,7 @@ public class Exame {
             System.out.println("-" + aux.getNome());
         }
     }
+    /*
     //lançar as notas
     public void lancaNotas() {
         System.out.println("Por favor Insira as notas aluno a aluno.");
@@ -154,7 +193,7 @@ public class Exame {
             System.out.println("");
             n.setNota(nota);
         }
-    }
+    }*/
     
     //lista todas as notas obtidas no exame
     public void listaNotas() {

@@ -5,14 +5,14 @@
  */
 package GestorDeExames;
 
+import java.io.Serializable;
 import java.util.*;
-import java.util.regex.*;
 
 /**
  *
  * @author jmmonteiro
  */
-public class Sala {
+public class Sala implements Serializable{
 
     private String departamento;
     private String nome;
@@ -60,10 +60,7 @@ public class Sala {
     }
 
     public boolean compNome(String nome) {
-        if (nome.equals(this.nome)) {
-            return true;
-        }
-        return false;
+        return nome.equals(this.nome);
     }
 
     public String getNome() {

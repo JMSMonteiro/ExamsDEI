@@ -5,16 +5,17 @@
  */
 package GestorDeExames;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
  *
  * @author jmmonteiro
  */
-public class Disciplina {
+public class Disciplina implements Serializable{
     private String nome;
     private Docente responsavel;
-    private ArrayList<Docente> outros;
+    private ArrayList<Docente> docentes;
     private ArrayList<Aluno> inscritos;
     private ArrayList<Exame> exames;
     
@@ -28,8 +29,8 @@ public class Disciplina {
         return responsavel;
     }
 
-    public ArrayList<Docente> getOutros() {
-        return outros;
+    public ArrayList<Docente> getDocentes() {
+        return docentes;
     }
 
     public ArrayList<Aluno> getInscritos() {
@@ -48,8 +49,8 @@ public class Disciplina {
         this.responsavel = responsavel;
     }
 
-    public void setOutros(ArrayList<Docente> outros) {
-        this.outros = outros;
+    public void setDocentes(ArrayList<Docente> docentes) {
+        this.docentes = docentes;
     }
 
     public void setInscritos(ArrayList<Aluno> inscritos) {

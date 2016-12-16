@@ -40,7 +40,7 @@ public class GestorFicheiros {
         outS.close();
     }
 
-    public void writeObjectFileArray(String fileName, ArrayList<Pessoa> list){
+    public void writeObjectFileArray(String fileName, ArrayList list){
         try{
             openOWrite(fileName);
             writeObject(list);
