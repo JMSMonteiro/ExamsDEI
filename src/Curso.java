@@ -33,20 +33,43 @@ public class Curso implements Serializable{
         this.disciplinas = disciplinas;
     }
 
+    /**
+     * 
+     * @return Devolve o nome do curso
+     */
     public String getNome() {
         return nome;
     }
-
+    
+    /**
+     * 
+     * @return Devolve o grau que o curso confere
+     */
     public String getGrau() {
         return grau;
     }
 
+    /**
+     * 
+     * @return Devolve a duração do curso em anos
+     */
     public int getDuracao() {
         return duracao;
     }
 
+    /**
+     * 
+     * @return Devolve as disciplinas que constituem o curso
+     */
     public ArrayList<Disciplina> getDisciplinas() {
         return disciplinas;
     }
 
+    /**
+     * Define as disciplinas do curso
+     * @param disciplinas Disciplinas do curso
+     */
+    public void setDisciplinas(ArrayList<Disciplina> disciplinas) {
+        this.disciplinas = disciplinas;
+    }
 }

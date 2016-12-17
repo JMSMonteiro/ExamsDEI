@@ -11,6 +11,11 @@ package GestorDeExames;
  */
 public class ERecurso extends Exame{
     
+    /**
+     * Builder da classe
+     * @param disciplina Disciplina a qual o exame pertence
+     * @param duracao Duração do exame em minutos
+     */
     public ERecurso(Disciplina disciplina, int duracao) {
         super(disciplina, duracao);
     }

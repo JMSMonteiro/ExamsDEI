@@ -49,7 +49,27 @@ public class GestorDeExamesDoDEI {
         Scanner sc = new Scanner(System.in);
 
         pessoas = gestor.leArrays(pessoasFich);
-
+        cursos = gestor.leArrays(cursosFich);
+        exames = gestor.leArrays(examesFich);
+        
+        //cursos.add(new Curso("MDM", "Mestrado"  , 2, new ArrayList<>()));
+        /*
+        alunos.add(new Aluno(2015235572, 2, new Curso("LEI", "Licenciatura", 3, new ArrayList()), "normal", "José Monteiro", "jmonteiro@student.dei.uc.pt"));
+        alunos.add(new Aluno(2015231261, 2, new Curso("LEI", "Licenciatura", 3, new ArrayList()), "normal", "Alexandre Rodrigues", "arodrigues@student.dei.uc.pt"));
+        alunos.add(new Aluno(2015845632, 2, new Curso("LEI", "Licenciatura", 3, new ArrayList()), "normal", "João Gonçalves", "jgonçalves@student.dei.uc.pt"));
+        alunos.add(new Aluno(2015878213, 2, new Curso("LEI", "Licenciatura", 3, new ArrayList()), "normal", "João Sopas", "sopas@student.dei.uc.pt"));
+        */
+        /* assistente, auxiliar, associado ou catedrático*/
+        /*sistemas de informação, comunicação e telemática, engenharia de software*/
+        /*
+        docentes.add(new Docente("Engenharia de software", 1234567890, "catedrático", "Nuno","Nuno@dei.uc.pt", new ArrayList()));
+        docentes.add(new Docente("Inteligencia artificial", 1234892325, "catedrático", "Ernesto","Ernesto@dei.uc.pt", new ArrayList()));
+        docentes.add(new Docente("Sistemas de informação", 1234284325, "assistente", "RPP","rpp@dei.uc.pt", new ArrayList()));
+        */
+        /*
+        naoDocentes.add(new NaoDocente(	"apoio técnico", 234567890, "técnico superior", "Marco", "Marco@helper.dei.uc.pt"));
+        */
+        
         for (Pessoa p : pessoas) {
             switch (p.tipoPessoa()) {
                 case 1:
@@ -68,10 +88,32 @@ public class GestorDeExamesDoDEI {
                     break;
             }
         }
-        System.out.println(alunos.get(0).getNome());
-        System.out.println(docentes.get(0).getNome());
+        /*
+        for(Curso c : cursos){
+            if(c.getNome().compareToIgnoreCase("LEI") == 0){
+                ArrayList aux = c.getDisciplinas();
+                ArrayList<Docente> ax = new ArrayList();
+                //ax.add(docentes.get(0));
+                ax.add(docentes.get(1));
+                aux.add(new Disciplina("IPRP", docentes.get(1), ax, alunos, new ArrayList()));
+                c.setDisciplinas(aux);
+            }
+        }*/
+        
+        
+        System.out.println(alunos.get(3).getNome());
+        System.out.println(docentes.get(2).getNome());
         System.out.println(naoDocentes.get(0).getNome());
-		
+        
+        for(Curso c : cursos){
+            System.out.println(c.getNome() + " " + c.getGrau() + " " + c.getDuracao());
+            ArrayList<Disciplina> test = c.getDisciplinas();
+            for(Disciplina d : test){
+                System.out.println(d.getNome() + " " + d.getResponsavel().getNome());
+            }
+        }
+        
+	/*
         System.out.print("Escolha uma opção:\n"
                 + "1.Criar Exame.\n"
                 + "2.Inscrever Alunos.\n"
@@ -151,43 +193,67 @@ public class GestorDeExamesDoDEI {
             case 7:
                 gestor.examesDoFuncionario(exames, docentes, naoDocentes);
                 break;
-        }
+        }*/
         gestor.guardaPessoas(pessoasFich,alunos, docentes, naoDocentes);
         gestor.guardaArray(cursosFich, cursos);
         gestor.guardaArray(examesFich, exames);
     }
 
     private void escolheDisc(ArrayList<Curso> list, String curso, String disc){
-    	ArrayList<Disciplina> aux;
-    	int flag = 0;
+        ArrayList<Disciplina> aux = new ArrayList<>();
+        int flag = 0;
+        Scanner sc = new Scanner(System.in);
+        //cursos
+        System.out.println("Cursos Disponíveis:");
+        for(Curso c : list){
+            //lista os cursos
+            System.out.println(c.getNome());
+        }
 
-    	System.out.println("Cursos Disponíveis:");
-    	for(Curso c : list){
-    		//lista os cursos
-    		System.out.println(c.getNome());
-    	}
+        System.out.println("\nPor favor insira o nome do Curso que pretende:");
+        do{
+            //Scanner para String
+            System.out.print("-> ");
+            curso = sc.nextLine();
+            for(Curso c : list){
+                //procura o curso dado como input no array
+                if(curso.compareToIgnoreCase(c.getNome()) == 0){
+                    curso = c.getNome();
+                    aux = c.getDisciplinas();
+                    flag = 1;
+                    break;
+                }
+            }
+            if(flag == 1){
+                flag = 0;
+                break;
+            }
+            System.out.println("Curso não encontrado, por favor insira o nome novamente.");
+        }while(true);
+    	
+        //disciplinas
+        System.out.println("Disciplinas disponíveis:");
+        for(Disciplina d : aux){
+            //Lista as disciplinas
+            System.out.println(d.getNome());
+        }
 
-    	System.out.println("\nPor favor insira o nome do Curso que pretende:");
-    	do{
-			//Scanner para String
-			System.out.print("-> ");
-			//curso = sc.nextLine();
-			for(Curso c : list){
-				//procura o curso dado como input no array
-				if(curso.compareToIgnoreCase(c.getNome()) == 0){
-					curso = c.getNome();
-					aux = c.getDisciplinas();
-					flag = 1;
-					break;
-				}
-			}
-			System.out.println("Curso não encontrado, por favor insira o nome novamente.");
-    	}while(true);
-    	System.out.println("Disciplinas disponíveis:");
-    	for(Disciplina d : aux){
-    		//Lista as disciplinas
-    		System.out.println(d.getNome());
-    	}
+        System.out.println("\nPor favor insira o nome do Curso que pretende:");
+        do{
+            System.out.print("-> ");
+            disc = sc.nextLine();
+            for(Disciplina d : aux){
+            if(disc.compareToIgnoreCase(d.getNome()) == 0){
+                disc = d.getNome();
+                flag = 1;
+                break;
+                }
+            }
+            if(flag == 1){
+                return;
+            }
+            System.out.println("Disciplina não encontrada, por favor insira o nome novamente.");
+        }while(true);
     }
 
     public Exame novoExame() {

@@ -14,11 +14,23 @@ import java.io.Serializable;
 public class NaoDocente extends Funcionario implements Serializable{
     private String cargo;
 
+    /**
+     * Builder da classe NaoDocente
+     * @param cargo Cargo do funcionário não docente (ex: secretaria, financeiro, apoio técnico)
+     * @param numeroMecanografico Número de identificação do funcionário
+     * @param categoria Categoria à qual o funcionário pertence (ex: assistente operacional, assistente técnico, técnico superior, técnico de informática ou especialista de informática)
+     * @param nome Nome do funcionário
+     * @param email Email do funcionário
+     */
     public NaoDocente(String cargo, int numeroMecanografico, String categoria, String nome, String email) {
         super(numeroMecanografico, categoria, nome, email);
         this.cargo = cargo;
     }
 
+    /**
+     * 
+     * @return Devolve o cargo do funcionário
+     */
     public String getCargo() {
         return cargo;
     }

@@ -25,22 +25,42 @@ public class Pessoa implements Serializable{
         this.email = email;
     }   
 
+    /**
+     * 
+     * @return Devolve o nome da pessoa
+     */
     public String getNome() {
         return nome;
     }
 
+    /**
+     * 
+     * @return Devolve o email da pessoa
+     */
     public String getEmail() {
         return email;
     }
 
+    /**
+     * Define parametro "nome"
+     * @param nome Nome da pessoa
+     */
     public void setNome(String nome) {
         this.nome = nome;
     }
 
+    /**
+     * Define o parametro "email"
+     * @param email Email da pessoa
+     */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /**
+     * 
+     * @return Tipo de pessoa, 1 = aluno, 2 = docente, 3 = nao docente, 0 = pessoa
+     */
     public int tipoPessoa(){ // 1 para funcionario 2 para aluno 3 pessoa 0 pessoa
         return 0;
     }

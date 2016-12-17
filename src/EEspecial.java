@@ -11,6 +11,11 @@ package GestorDeExames;
  */
 public class EEspecial extends Exame{
     
+    /**
+     * Builder da classe
+     * @param disciplina Disciplina a qual o exame pertence
+     * @param duracao Duração do exame em minutos
+     */
     public EEspecial(Disciplina disciplina, int duracao) {
         super(disciplina, duracao);
     }

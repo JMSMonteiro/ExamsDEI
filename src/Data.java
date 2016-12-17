@@ -21,8 +21,9 @@ public class Data implements Serializable{
     public Data() {
     }
 
-    public Data(int ano, int mes, int dia, int hora, int minuto) {
-        cal = new GregorianCalendar(ano, mes, dia, hora, minuto);
+    public Data(int dia, int mes, int ano, int hora, int minuto) {
+        this.cal = new GregorianCalendar(dia, mes, ano, hora, minuto);
+        cal.setLenient(true);
 
         cal.set(Calendar.MONTH, mes);
         cal.set(Calendar.DAY_OF_MONTH, dia);
