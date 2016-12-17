@@ -906,12 +906,17 @@ public class GestorDeExamesDoDEI {
             System.out.println("Não foi encontrado nenhum funcionario com o número " + String.valueOf(nMecan) + ", por favor insira o número novamente.");
         }while(true);
         
+        System.out.println("\n\n");
+        
         for(Exame e : exames){
             ArrayList<Docente> lista = e.getVigilantes();
             ArrayList<NaoDocente> lista2 = e.getApoio();
             int flag = 0;
             
             if(auxi == 1){
+                if(e.getResponsavel().getNumeroMecanografico() == nMecan){
+                    flag = 1;
+                }
                 for(Docente f : lista){
                     if(f.getNumeroMecanografico() == nMecan){
                         flag = 1;
@@ -929,7 +934,7 @@ public class GestorDeExamesDoDEI {
             }
             if(flag == 1){
                 //aux.add(e);
-                System.out.println(e.getData().toString() + "Disciplina: " + e.getDisciplina());
+                System.out.println(e.getData().time() + "\tDisciplina: " + e.getDisciplina().getNome());
             }
         }
     }
