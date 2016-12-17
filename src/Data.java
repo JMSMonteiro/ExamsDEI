@@ -25,7 +25,7 @@ public class Data implements Serializable{
         this.cal = new GregorianCalendar(dia, mes, ano, hora, minuto);
         cal.setLenient(true);
 
-        cal.set(Calendar.MONTH, mes);
+        cal.set(Calendar.MONTH, mes - 1);
         cal.set(Calendar.DAY_OF_MONTH, dia);
         cal.set(Calendar.YEAR, ano);
         cal.set(Calendar.HOUR, hora);
@@ -128,6 +128,10 @@ public class Data implements Serializable{
 
     public Calendar getCal() {
         return cal;
+    }
+    
+    public Date time(){
+        return cal.getTime();
     }
 
 }

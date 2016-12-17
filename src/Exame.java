@@ -32,6 +32,10 @@ public class Exame implements Serializable{
     public Exame(Disciplina disciplina, int duracao) {
         this.disciplina = disciplina;
         this.duracao = duracao;
+        this.vigilantes = new ArrayList<>();
+        this.apoio = new ArrayList<>();
+        this.inscritos = new ArrayList<>();
+        this.notas = new ArrayList<>();
     }
     
     /**
@@ -309,7 +313,7 @@ public class Exame implements Serializable{
     public String toString(){
     return "Época: " + epoca()
             + "\nDisciplina: " + disciplina
-            + "\nData de realização: " + data.getCal().toString()
+            + "\nData de realização: " + data.time().toString()
             + "\nDuracao: " + duracao
             + "\nSala: " + sala.getNome()
             + "\nNumero de Vigilantes: " + vigilantes.size()
