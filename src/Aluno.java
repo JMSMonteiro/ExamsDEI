@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class Aluno extends Pessoa implements Serializable{
 
-    private int numero;
+    private long numero;
     private int matrícula;
     private Curso curso;
     private String regime;
@@ -47,7 +47,7 @@ public class Aluno extends Pessoa implements Serializable{
      * 
      * @return Devolve o número de identificação do aluno
      */
-    public int getNumero() {
+    public long getNumero() {
         return numero;
     }
 

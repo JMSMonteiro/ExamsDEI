@@ -25,7 +25,7 @@ public class GestorDeExamesDoDEI {
     //file names
     private static String cursosFich = "cursos.obj";
     private static String pessoasFich = "pessoas.obj";
-    private static String salasFich = "salas";         //.txt
+    private static String salasFich = "salas.obj";         //.txt
     private static String examesFich = "exames.obj";
 
     public static void main(String[] args) {
@@ -51,13 +51,18 @@ public class GestorDeExamesDoDEI {
         pessoas = gestor.leArrays(pessoasFich);
         cursos = gestor.leArrays(cursosFich);
         exames = gestor.leArrays(examesFich);
-        
-        //cursos.add(new Curso("MDM", "Mestrado"  , 2, new ArrayList<>()));
+        salas = gestor.leArrays(salasFich);
         /*
-        alunos.add(new Aluno(2015235572, 2, new Curso("LEI", "Licenciatura", 3, new ArrayList()), "normal", "José Monteiro", "jmonteiro@student.dei.uc.pt"));
-        alunos.add(new Aluno(2015231261, 2, new Curso("LEI", "Licenciatura", 3, new ArrayList()), "normal", "Alexandre Rodrigues", "arodrigues@student.dei.uc.pt"));
-        alunos.add(new Aluno(2015845632, 2, new Curso("LEI", "Licenciatura", 3, new ArrayList()), "normal", "João Gonçalves", "jgonçalves@student.dei.uc.pt"));
-        alunos.add(new Aluno(2015878213, 2, new Curso("LEI", "Licenciatura", 3, new ArrayList()), "normal", "João Sopas", "sopas@student.dei.uc.pt"));
+        cursos.add(new Curso("LEI", "Licenciatura"  , 3, new ArrayList<>()));
+        cursos.add(new Curso("LDM", "Licenciatura"  , 3, new ArrayList<>()));
+        cursos.add(new Curso("MEI", "Mestrado"  , 2, new ArrayList<>()));
+        cursos.add(new Curso("MDM", "Mestrado"  , 2, new ArrayList<>()));
+        */
+        /*
+        alunos.add(new Aluno(2015235572, 2, cursos.get(0), "normal", "José Monteiro", "jmonteiro@student.dei.uc.pt"));
+        alunos.add(new Aluno(2015231261, 2, cursos.get(0), "normal", "Alexandre Rodrigues", "arodrigues@student.dei.uc.pt"));
+        alunos.add(new Aluno(2015845632, 2, cursos.get(0), "normal", "João Gonçalves", "jgonçalves@student.dei.uc.pt"));
+        alunos.add(new Aluno(2015878213, 2, cursos.get(0), "normal", "João Sopas", "sopas@student.dei.uc.pt"));
         */
         /* assistente, auxiliar, associado ou catedrático*/
         /*sistemas de informação, comunicação e telemática, engenharia de software*/
@@ -69,6 +74,17 @@ public class GestorDeExamesDoDEI {
         /*
         naoDocentes.add(new NaoDocente(	"apoio técnico", 234567890, "técnico superior", "Marco", "Marco@helper.dei.uc.pt"));
         */
+        
+        //add alunos à lista de inscritos das disciplinas
+        for(Curso c : cursos){
+            int i = 0;
+            if(i == 0){
+                for(Disciplina d : c.getDisciplinas()){
+                    d.setInscritos(alunos);
+                }
+            }
+            i += 1;
+        }
         
         for (Pessoa p : pessoas) {
             switch (p.tipoPessoa()) {
@@ -88,18 +104,19 @@ public class GestorDeExamesDoDEI {
                     break;
             }
         }
+        
         /*
         //adiciona cadeira manualmente
         for(Curso c : cursos){
             if(c.getNome().compareToIgnoreCase("LEI") == 0){
                 ArrayList aux = c.getDisciplinas();
                 ArrayList<Docente> ax = new ArrayList();
-                ArrayList<Aluno> axu = new ArrayList();
+                //ArrayList<Aluno> axu = new ArrayList();
                 //ax.add(docentes.get(0));
                 ax.add(docentes.get(2));
-                axu.add(alunos.get(1));
+                //axu.add(alunos.get(1));
                 
-                aux.add(new Disciplina("TI", docentes.get(2), ax, axu, new ArrayList()));
+                aux.add(new Disciplina("TI", docentes.get(2), ax, new ArrayList(), new ArrayList()));
                 c.setDisciplinas(aux);
             }
         }*/
@@ -109,9 +126,11 @@ public class GestorDeExamesDoDEI {
         System.out.println(alunos.get(3).getNome());
         System.out.println(docentes.get(2).getNome());
         System.out.println(naoDocentes.get(0).getNome());
-        
+        */
+        /*
         for(Curso c : cursos){
             System.out.println(c.getNome() + " " + c.getGrau() + " " + c.getDuracao());
+            
             ArrayList<Disciplina> test = c.getDisciplinas();
             for(Disciplina d : test){
                 System.out.println("____");
@@ -230,6 +249,7 @@ public class GestorDeExamesDoDEI {
         gestor.guardaPessoas(pessoasFich, alunos, docentes, naoDocentes);
         gestor.guardaArray(cursosFich, cursos);
         gestor.guardaArray(examesFich, exames);
+        gestor.guardaArray(salasFich, salas);
     }
 
     private void escolheDisc(ArrayList<Curso> list, String curso, String disc){
@@ -338,12 +358,12 @@ public class GestorDeExamesDoDEI {
          */
         for (Curso curso : cursos) {
             for (Disciplina d : curso.getDisciplinas()) {
-                if (d.getNome().equals(disc)) {
+                if (d.getNome().compareToIgnoreCase(disc)==0) {
                     disciplina = d;
                     break;
                 }
             }
-            if (disciplina.getNome().isEmpty()) {
+            if (disciplina.getNome()==null) {
                 break;
             }
         }
@@ -453,17 +473,23 @@ public class GestorDeExamesDoDEI {
         int i = 0, duracao, matricula, num;
         Scanner sc = new Scanner(System.in);
         String insc;
+        int flag = 0;
 
         System.out.println("Lista de exames disponiveis:");
         for (Exame exam : exames) {
             //so disponibiliza os exames das disciplinas do curso do aluno
             disciplina = exam.getDisciplina();
             disc = aluno.getCurso().getDisciplinas();
-            if (disc.contains(disciplina)) {
-                examesDisp.add(exam);
-                System.out.println(i + ".\n" + exam.toString()); //imprime o toString() dos exames das disciplinas a que o aluno esta inscrito
-                i++;
-            } else {
+            //if (disc.contains(disciplina)) {
+            for(Disciplina d : disc){
+            	if(d.getNome().compareToIgnoreCase(disciplina.getNome()) == 0){
+	                examesDisp.add(exam);
+	                System.out.println(i + ".\n" + exam.toString()); //imprime o toString() dos exames das disciplinas a que o aluno esta inscrito
+	                i++;
+	                flag = 1;
+            	}
+            }
+            if(flag == 0) {
                 System.out.println("Não há nenhum exame disponivel.");
                 return false;
             }
@@ -727,20 +753,35 @@ public class GestorDeExamesDoDEI {
         for(Exame e : exames){
             ArrayList<Notas> lista = e.getNotas();
             int flag = 0;
-            for(Notas a : lista){
-                if(a.getAluno().getNumero() == nEstudante){
-                    flag = 1;
-                    break;
-                }
-                //se o aluno foi encontrado
-                if(flag == 1){
-                    //aux.add(e);
-                    System.out.print(e.getData().toString() + " " + e.getDisciplina());
-                    if(a.getNota() != -1){
-                        System.out.println("Nota: " + String.valueOf(a.getNota()));
+            if(lista.isEmpty()){
+                for(Aluno a : e.getInscritos()){
+                    if(a.getNumero() == nEstudante){
+                        flag = 1;
+                        break;
+                    }
+                    if(flag == 1){
+                        //aux.add(e);
+                        System.out.print(e.getData().toString() + " " + e.getDisciplina());
                     }
                 }
             }
+            else{
+               for(Notas a : lista){
+                    if(a.getAluno().getNumero() == nEstudante){
+                        flag = 1;
+                        break;
+                    }
+                    //se o aluno foi encontrado
+                    if(flag == 1){
+                        //aux.add(e);
+                        System.out.print(e.getData().toString() + " " + e.getDisciplina());
+                        if(a.getNota() != -1){
+                            System.out.println("Nota: " + String.valueOf(a.getNota()));
+                        }
+                    }
+                } 
+            }
+            
         }
     }
     /**

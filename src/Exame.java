@@ -259,14 +259,21 @@ public class Exame implements Serializable{
      * Imprime todos os alunos e as respectivas notas, caso existam
      */
     public void listaAlunos() {
-        System.out.println("Alunos inscritos:\n\n");
-        for (Notas aux : notas) {
-            Aluno al = aux.getAluno();
-            System.out.print("-" + al.getNome());
-            if (aux.getNota() != -1) {
-                System.out.print("; Nota: " + aux.getNota());
+        System.out.println("\n\nAlunos inscritos:");
+        if(notas.size() != inscritos.size()){
+            for(Aluno a : inscritos){
+                System.out.println("- " + a.getNome());
             }
-            System.out.println("");
+        }
+        else{
+            for (Notas aux : notas) {
+                Aluno al = aux.getAluno();
+                System.out.print("-" + al.getNome());
+                if (aux.getNota() != -1) {
+                    System.out.print("; Nota: " + aux.getNota());
+                }
+                System.out.println("");
+            }
         }
     }
 
@@ -312,7 +319,7 @@ public class Exame implements Serializable{
     @Override
     public String toString(){
     return "Época: " + epoca()
-            + "\nDisciplina: " + disciplina
+            + "\nDisciplina: " + disciplina.getNome()
             + "\nData de realização: " + data.time().toString()
             + "\nDuracao: " + duracao
             + "\nSala: " + sala.getNome()
