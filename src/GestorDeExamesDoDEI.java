@@ -159,9 +159,9 @@ public class GestorDeExamesDoDEI {
                     exame = gestor.novoExame();
                     if (exame != null) {
                         System.out.println("\nExame marcado para " + exame.getData().getCal().getTime() + " na sala " + exame.getSala().getNome());
+	                    exames.add(exame);
+	                    salas.add(exame.getSala());
                     }
-                    exames.add(exame);
-                    salas.add(exame.getSala());
                                                     
                     break;
                 case 2:
@@ -200,12 +200,19 @@ public class GestorDeExamesDoDEI {
                     break;
                 case 4:
                     System.out.println("Indique a disciplina do Exame:");
-                    nomeDisc = sc.next();
+                    do {
+                        try {
+                            nomeDisc = sc.next();
+                        } catch (Exception e) {
+                            nomeDisc = null;
+                            System.out.println("------Insira letras e não números-----");
+                        }
+                    } while (nomeDisc == null);
 
                     if (exames.isEmpty()) {
                         System.out.println("Não existem exames listados.\n");
                     } else {
-                        if (gestor.convocaVigilantes(naoDocentes, docentes, nomeDisc)) {
+                        if (gestor.convocaVigilantes(naoDocentes, nomeDisc)) {
                             System.out.println("Convocatória concluida com sucesso. \n");
                         } else {
                             System.out.println("Não foram convocados Docentes.\n");
@@ -242,7 +249,12 @@ public class GestorDeExamesDoDEI {
                         case 6:
                             gestor.listaRefExame(2);
                             break;
+                        default:
+                            break;
                     }
+                    break;
+                default:
+                    System.out.println("A terminar o programa.");
                     break;
             }
         }
@@ -327,7 +339,19 @@ public class GestorDeExamesDoDEI {
                 + "2. Exame de Época de Recurso.\n"
                 + "3. Exame de Época Especial.\n"
                 + "A sua opção :");
-        opcao = sc.nextInt();
+        
+        do {
+            System.out.println("A sua opção :");
+            try {
+                opcao = sc.nextInt();
+            } catch (Exception e) {
+                opcao = -1;
+                System.out.println("---------Insira números e não letras---------");
+            }
+            if (opcao < 0 || opcao > 3) {
+                System.out.println("Opcção Inválida.");
+            }
+        } while (opcao == -1 || opcao < 0 || opcao > 3);
 
         //Exame
         while (protege) {
@@ -358,7 +382,7 @@ public class GestorDeExamesDoDEI {
          */
         for (Curso curso : cursos) {
             for (Disciplina d : curso.getDisciplinas()) {
-                if (d.getNome().compareToIgnoreCase(disc)==0) {
+                if (d.getNome().compareToIgnoreCase(disc) == 0) {
                     disciplina = d;
                     break;
                 }
@@ -394,7 +418,7 @@ public class GestorDeExamesDoDEI {
 
     public Sala requisitaSala(int duraçao) {
         //se configurar== true é para configurar uma sala existente, se configurar == false é para quando se cria a sala
-        String depSala, nomeSala;
+        String depSala = null, nomeSala = null;
         Sala sala = new Sala();
         Data data;
 
@@ -402,11 +426,20 @@ public class GestorDeExamesDoDEI {
 
         //Sala
         System.out.print("-----------\n"
-                + "Preencha os dados da SALA:\n"
-                + "1. Nome do departamento: ");
-        depSala = sc.next();
-        System.out.print("2. Nome da Sala: ");
-        nomeSala = sc.next();
+               + "Preencha os dados da SALA:\n");
+
+        do {
+            System.out.println("1. Nome do departamento: ");
+            try {
+                depSala = sc.next();
+                System.out.print("2. Nome da Sala: ");
+                nomeSala = sc.next();
+
+            } catch (Exception e) {
+                depSala = null;
+                System.out.println("------Insira letras e não números-----");
+            }
+        } while (depSala == null || nomeSala == null);
 
         if (salas.isEmpty()) {
             System.out.println("A Sala " + nomeSala + " ainda não existe. Logo, vai ser criada.");
@@ -450,7 +483,7 @@ public class GestorDeExamesDoDEI {
                 dataSala = sc.nextLine();
                 dat = data.protegeData(dataSala);
             }
-        } while (dat == null);
+        } while (dat == null || dataSala == null);
 
         if (!dat.isEmpty()) {
             int ano, mes, dia, hora, minuto;
@@ -501,7 +534,15 @@ public class GestorDeExamesDoDEI {
 
             if ("S".equals(insc)) {
                 System.out.println("Insira o número do exame: ");
-                num = sc.nextInt();
+                do {
+                    try {
+                        num = sc.nextInt();
+                    } catch (Exception e) {
+                        num = -1;
+                        System.out.println("---------Insira números e não letras----------");
+                    }
+                } while (num == -1);
+
                 if (num > i || num < 0) {
                     System.out.println("Opção Inválida");
                 } else {
@@ -540,7 +581,7 @@ public class GestorDeExamesDoDEI {
     }
 
     private boolean lançaNotas(String nomeDisc) {
-        int i = 0, num;
+        int i = 0, num = -1;
         Scanner sc = new Scanner(System.in);
         ArrayList<Exame> examesDisp = new ArrayList<>();
         String insc;
@@ -559,7 +600,15 @@ public class GestorDeExamesDoDEI {
 
             if ("S".equals(insc)) {
                 System.out.println("Insira o número do exame: ");
-                num = sc.nextInt();
+                do {
+                    try {
+                        num = sc.nextInt();
+                    } catch (Exception e) {
+                        num = -1;
+                        System.out.println("---------Insira números e não letras----------");
+                    }
+                } while (num == -1);
+
                 if (num > i || num < 0) {
                     System.out.println("Opção Inválida");
                 } else {
@@ -578,11 +627,11 @@ public class GestorDeExamesDoDEI {
         return false;
     }
 
-    public boolean convocaVigilantes(ArrayList<NaoDocente> naoDocente, ArrayList<Docente> docente, String nomeDisc) {
+    public boolean convocaVigilantes(ArrayList<NaoDocente> naoDocente, String nomeDisc) {
         Data dataDocente;
         Exame exame;
         boolean convocaDocente = false;
-        int j = 0, num;
+        int j = 0, num = -1;
         String insc;
 
         Scanner sc = new Scanner(System.in);
@@ -602,7 +651,15 @@ public class GestorDeExamesDoDEI {
 
             if ("S".equals(insc)) {
                 System.out.println("Insira o número do exame: ");
-                num = sc.nextInt();
+                do {
+                    try {
+                        num = sc.nextInt();
+                    } catch (Exception e) {
+                        num = -1;
+                        System.out.println("---------Insira números e não letras----------");
+                    }
+                } while (num == -1);
+
                 if (num > j || num < 0) {
                     System.out.println("Opção Inválida");
                 } else {
@@ -726,28 +783,37 @@ public class GestorDeExamesDoDEI {
      * @param alunos ArrayList de alunos, todos os alunos registados na base de
      * dados
      */
-    public void examesDoAluno(ArrayList<Exame> exames, ArrayList<Aluno> alunos){
+    public void examesDoAluno(ArrayList<Exame> exames, ArrayList<Aluno> alunos) {
         //ArrayList<Exame> aux = new ArrayList<>();
         //Pede numero de estudante
         Scanner sc = new Scanner(System.in);
-        int nEstudante;
+        int nEstudante = -1;
         System.out.println("Insira o número do aluno que pretende consultar:");
-        do{
+        do {
             int flag = 0;
             System.out.print("-> ");
-            nEstudante = sc.nextInt();
-            //ver se nEstudante existe no array de alunos
-            for(Aluno a : alunos){
-                if(nEstudante == a.getNumero()){
-                    flag = 1;
+            try {
+                nEstudante = sc.nextInt();
+            } catch (Exception e) {
+                nEstudante = -1;
+                System.out.println("---------Insira números e não letras----------");
+
+            }
+            if (nEstudante != -1) {
+                //ver se nEstudante existe no array de alunos
+                for (Aluno a : alunos) {
+                    if (nEstudante == a.getNumero()) {
+                        flag = 1;
+                        break;
+                    }
+                }
+                if (flag == 1) {
                     break;
                 }
+                System.out.println("Não foi encontrado nenhum estudante com o número " + String.valueOf(nEstudante) + ", por favor insira o número novamente.");
             }
-            if(flag == 1){
-                break;
-            }
-            System.out.println("Não foi encontrado nenhum estudante com o número " + String.valueOf(nEstudante) + ", por favor insira o número novamente." );
-        }while(true);
+
+        } while (true);
         
         //print "Exames em que o aluno <nome> está inscrito"
         for(Exame e : exames){
@@ -757,11 +823,12 @@ public class GestorDeExamesDoDEI {
                 for(Aluno a : e.getInscritos()){
                     if(a.getNumero() == nEstudante){
                         flag = 1;
-                        break;
+                        //break;
                     }
                     if(flag == 1){
                         //aux.add(e);
-                        System.out.print(e.getData().toString() + " " + e.getDisciplina());
+                        System.out.print(e.getData().time() + "\t" + e.getDisciplina().getNome());
+                        break;
                     }
                 }
             }
@@ -769,14 +836,15 @@ public class GestorDeExamesDoDEI {
                for(Notas a : lista){
                     if(a.getAluno().getNumero() == nEstudante){
                         flag = 1;
-                        break;
+                        //break;
                     }
                     //se o aluno foi encontrado
                     if(flag == 1){
                         //aux.add(e);
-                        System.out.print(e.getData().toString() + " " + e.getDisciplina());
+                        System.out.print(e.getData().time()+ "\t" + e.getDisciplina().getNome());
                         if(a.getNota() != -1){
-                            System.out.println("Nota: " + String.valueOf(a.getNota()));
+                            System.out.println("\tNota: " + String.valueOf(a.getNota()));
+                            break;
                         }
                     }
                 } 
@@ -800,28 +868,35 @@ public class GestorDeExamesDoDEI {
         //Pede numero mecanográfico
         Scanner sc = new Scanner(System.in);
         //Scanner
-        int nMecan;
+        int nMecan = -1;
         int auxi = 0;   //meramente para otimização
         System.out.println("Insira o número do funcionário que pretende consultar:");
         //----------------------inserir opção para retroceder?------------------------
         do{
             int flag = 0;
             System.out.print("-> ");
-            nMecan = sc.nextInt();
-            //procurar numero no array de funcionarios
-            for(Docente d : docentes){
-                if(nMecan == d.getNumeroMecanografico()){
-                    flag = 1;
-                    auxi = 1;
-                    break;
-                }
+            try {
+                nMecan = sc.nextInt();
+            } catch (Exception e) {
+                nMecan = -1;
+                System.out.println("---------Insira números e não letras----------");
             }
-            if(flag == 0){
-                for(NaoDocente n : naoDocentes){
-                    if(nMecan == n.getNumeroMecanografico()){
+            if (nMecan != -1) {
+                //procurar numero no array de funcionarios
+                for (Docente d : docentes) {
+                    if (nMecan == d.getNumeroMecanografico()) {
                         flag = 1;
-                        auxi = 2;
+                        auxi = 1;
                         break;
+                    }
+                }
+                if (flag == 0) {
+                    for (NaoDocente n : naoDocentes) {
+                        if (nMecan == n.getNumeroMecanografico()) {
+                            flag = 1;
+                            auxi = 2;
+                            break;
+                        }
                     }
                 }
             }
