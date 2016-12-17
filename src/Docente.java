@@ -63,6 +63,14 @@ public class Docente extends Funcionario implements Serializable{
         return areaInvestigacao;
     }
     
+    /**
+     * 
+     * @param data Data a ser adicionada ao tempo ocupado
+     */
+    public void adicionaTrabalho(Data data){
+        trabalho.add(data);
+    }
+    
 
     @Override
     public int tipoPessoa() { // 1 para aluno 2 para docente 3 para naodocente

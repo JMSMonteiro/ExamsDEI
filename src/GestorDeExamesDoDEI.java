@@ -74,7 +74,7 @@ public class GestorDeExamesDoDEI {
         /*
         naoDocentes.add(new NaoDocente(	"apoio técnico", 234567890, "técnico superior", "Marco", "Marco@helper.dei.uc.pt"));
         */
-        
+        /*
         //add alunos à lista de inscritos das disciplinas
         for(Curso c : cursos){
             int i = 0;
@@ -84,7 +84,7 @@ public class GestorDeExamesDoDEI {
                 }
             }
             i += 1;
-        }
+        }*/
         
         for (Pessoa p : pessoas) {
             switch (p.tipoPessoa()) {
@@ -186,7 +186,7 @@ public class GestorDeExamesDoDEI {
                     break;
                 case 3:
                     System.out.println("Indique a disciplina do Exame:");
-                    nomeDisc = sc.nextLine();
+                    nomeDisc = sc.next();
 
                     if (exames.isEmpty()) {
                         System.out.println("Não existem exames listados.\n");
@@ -205,7 +205,7 @@ public class GestorDeExamesDoDEI {
                     if (exames.isEmpty()) {
                         System.out.println("Não existem exames listados.\n");
                     } else {
-                        if (gestor.convocaVigilantes(naoDocentes, nomeDisc)) {
+                        if (gestor.convocaVigilantes(naoDocentes, docentes, nomeDisc)) {
                             System.out.println("Convocatória concluida com sucesso. \n");
                         } else {
                             System.out.println("Não foram convocados Docentes.\n");
@@ -234,10 +234,10 @@ public class GestorDeExamesDoDEI {
                             gestor.examesDoAluno(exames, alunos);
                             break;
                         case 4:
-                            gestor.examesDoFuncionario(exames, docentes, naoDocentes);
+                            gestor.listaRefExame(3);
                             break;
                         case 5:
-                            gestor.listaRefExame(3);
+                            gestor.examesDoFuncionario(exames, docentes, naoDocentes);
                             break;
                         case 6:
                             gestor.listaRefExame(2);
@@ -578,7 +578,7 @@ public class GestorDeExamesDoDEI {
         return false;
     }
 
-    public boolean convocaVigilantes(ArrayList<NaoDocente> naoDocente, String nomeDisc) {
+    public boolean convocaVigilantes(ArrayList<NaoDocente> naoDocente, ArrayList<Docente> docente, String nomeDisc) {
         Data dataDocente;
         Exame exame;
         boolean convocaDocente = false;

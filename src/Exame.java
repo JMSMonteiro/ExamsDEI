@@ -32,6 +32,7 @@ public class Exame implements Serializable{
     public Exame(Disciplina disciplina, int duracao) {
         this.disciplina = disciplina;
         this.duracao = duracao;
+        this.responsavel = disciplina.getResponsavel();
         this.vigilantes = new ArrayList<>();
         this.apoio = new ArrayList<>();
         this.inscritos = new ArrayList<>();
@@ -282,15 +283,22 @@ public class Exame implements Serializable{
      * Imprime todos os funcionários associados ao exame, sendo eles docentes ou não docentes
      */
     public void listaFuncionarios() {
-        System.out.println("Funcionários associados ao exame:\n\n");
-        System.out.println("Docentes:\n");
-        for (Docente aux : vigilantes) {
-            System.out.println("-" + aux.getNome());
+        System.out.println("Responsável: " + responsavel.getNome());
+        if(vigilantes.size() != 0 || apoio.size() != 0){
+            System.out.println("Funcionários associados ao exame:\n\n");
         }
-        System.out.println("Não Docentes:\n");
-        for (NaoDocente aux : apoio) {
-            System.out.println("-" + aux.getNome());
+        if(vigilantes.size() != 0){
+            System.out.println("Docentes:\n");
+            for (Docente aux : vigilantes) {
+                System.out.println("-" + aux.getNome());
+            }
         }
+        if(apoio.size() != 0){
+            System.out.println("Não Docentes:\n");
+            for (NaoDocente aux : apoio) {
+                System.out.println("-" + aux.getNome());
+            }
+        }    
     }
     /*
     //lançar as notas
